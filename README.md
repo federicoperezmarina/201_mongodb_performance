@@ -8,3 +8,6 @@ This is a repository to learn about mongodb performance
 * [Mongodb Logs](#mongodb-logs)
 * [Mongodb Keyhole](#mongodb-keyhole)
 * [Mongodb Maobi](#mongodb-maobi)
+
+## Mongodb Optimizing Queries
+* [Projections]
