@@ -10,4 +10,6 @@ This is a repository to learn about mongodb performance
 * [Mongodb Maobi](#mongodb-maobi)
 
 ## Mongodb Optimizing Queries
-* [Projections]
+* [Projections](#projections)
+
+### Projections
