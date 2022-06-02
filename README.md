@@ -11,5 +11,13 @@ This is a repository to learn about mongodb performance
 
 ## Mongodb Optimizing Queries
 * [Projections](#projections)
+* [Batch processing](#batch-processing)
+* [Bulk insert](#bulk-insert)
+* [Adding indexes](#adding-indexes)
+* [Optimizing sort operations](#optimizing-sort-operations)
 
 ### Projections
+### Batch processing
+### Bulk insert
+### Adding indexes
+### Optimizing sort operations
