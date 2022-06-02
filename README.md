@@ -10,14 +10,26 @@ This is a repository to learn about mongodb performance
 * [Mongodb Maobi](#mongodb-maobi)
 
 ## Mongodb Optimizing Queries
-* [Projections](#projections)
+* [Explain command](#explain-command)
+* [Adding indexes / Covered Query](#adding-indexes--covered-query)
+* [Projections and Limit](#projections-and-limit)
 * [Batch processing](#batch-processing)
 * [Bulk insert](#bulk-insert)
-* [Adding indexes](#adding-indexes)
 * [Optimizing sort operations](#optimizing-sort-operations)
+* [Query selectivity / Filter strategies](#query-selectivity--filter-strategies)
+* [Optimizing collections scans](#optimizing-collections-scans)
 
-### Projections
+### Explain command
+### Adding indexes / Covered Query
+### Projections and Limit
 ### Batch processing
 ### Bulk insert
-### Adding indexes
 ### Optimizing sort operations
+### Query selectivity / Filter strategies
+Not equals conditions
+Range queries
+$OR or $IN operations
+Array Queries
+Regular Expressions
+$exists Queries
+### Optimizing collections scans
