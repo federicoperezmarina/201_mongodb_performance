@@ -20,6 +20,7 @@ This is a repository to learn about mongodb performance
 * [Optimizing collections scans](#optimizing-collections-scans)
 
 ### Explain command
+
 ### Adding indexes / Covered Query
 ### Projections and Limit
 ### Batch processing
