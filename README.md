@@ -30,6 +30,7 @@ docker exec -it example-mongo mongo
 * [Optimizing collections scans](#optimizing-collections-scans)
 
 ### Explain command
+
 ### Adding indexes / Covered Query
 ### Projections and Limit
 ### Batch processing
