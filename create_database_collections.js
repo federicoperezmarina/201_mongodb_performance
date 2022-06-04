@@ -15,23 +15,53 @@ async function main() {
   console.log('Connected successfully to server');
   const dbConnection = client.db(dbName);
 
-  await createTroopers(dbConnection);
+  await createStormTroopers(dbConnection);
+  await createClones(dbConnection);
+  await createBattleDroid(dbConnection);
 
   return 'main done';
 }
 
-async function createTroopers(dbConnection){
+async function createStormTroopers(dbConnection){
   const collection = dbConnection.collection('characters');
 
   for (let i = 0; i < 1000; i++) {
     const insertResult = await collection.insertOne({
         "name":"DAX-"+i.toString(),
-        "type":"trooper",
+        "type":"stormtrooper",
+        "side":"empire",
         "strength":Math.floor(Math.random() * (50 + 1))
     });
     //console.log('Inserted documents =>', insertResult);    
   }
-  //return "createTroopers done"
+}
+
+async function createClones(dbConnection){
+  const collection = dbConnection.collection('characters');
+
+  for (let i = 0; i < 1000; i++) {
+    const insertResult = await collection.insertOne({
+        "name":"KYT-"+i.toString(),
+        "type":"clone",
+        "side":"empire",
+        "strength":Math.floor(Math.random() * (50 + 1))
+    });
+    //console.log('Inserted documents =>', insertResult);    
+  }
+}
+
+async function createBattleDroid(dbConnection){
+  const collection = dbConnection.collection('characters');
+
+  for (let i = 0; i < 2000; i++) {
+    const insertResult = await collection.insertOne({
+        "name":"B"+(Math.floor(Math.random() * (2))+1)+"-"+i.toString(),
+        "type":"battle droid",
+        "side":"empire",
+        "strength":Math.floor(Math.random() * (50 + 1))
+    });
+    //console.log('Inserted documents =>', insertResult);    
+  }  
 }
 
 main()
