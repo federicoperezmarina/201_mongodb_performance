@@ -1,14 +1,26 @@
 # 201_mongodb_performance
 This is a repository to learn about mongodb performance
 
-First of all we have to install a mongodb database. We are going to create with docker. With the next command we will create a container with a mongodb databaes.
+First of all we have to install a mongodb database. We are going to create with docker. With the next command we will create a container with a mongodb database.
 ```sh
 docker container run --name mongo-starwars --publish 27017:27017 -d mongo
 ```
 
 In order to connect to the database we can use this docker command:
 ```sh
-docker container exec -it mongo-starwars bash
+#to connect to the container
+docker container exec -it mongo-starwars bash;
+#to enter to the database
+mongo
+```
+
+After the creation of the database, we need to create collections and documents in order to learn how to improve the performance in mongodb.
+```sh
+#install the dependency of mongodb in node
+npm install mongodb
+
+# to execute the creation of collection and documents
+node create_database_collections.js
 ```
 
 ## Table of Contents
