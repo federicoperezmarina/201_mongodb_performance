@@ -10,6 +10,7 @@ In order to connect to the database we can use this docker command:
 ```sh
 #to connect to the container
 docker container exec -it mongo-starwars bash;
+
 #to enter to the database
 mongo
 ```
