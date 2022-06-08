@@ -15,11 +15,44 @@ async function main() {
   console.log('Connected successfully to server');
   const dbConnection = client.db(dbName);
 
+  //troops
   await createStormTroopers(dbConnection);
   await createClones(dbConnection);
   await createBattleDroid(dbConnection);
 
+  //starships
+  await createTieFigthers(dbConnection);
+  await createXWings(dbConnection);
+
   return 'main done';
+}
+
+async function createXWings(dbConnection){
+  const collection = dbConnection.collection('starships');
+
+  for (let i = 0; i < 1000; i++) {
+    const insertResult = await collection.insertOne({
+        "name":"X-Wing - "+i.toString(),
+        "type":"X-Wing",
+        "side":"rebel",
+        "power":Math.floor(Math.random() * (500 + 1))
+    });
+    //console.log('Inserted documents =>', insertResult);    
+  }
+}
+
+async function createTieFigthers(dbConnection){
+  const collection = dbConnection.collection('starships');
+
+  for (let i = 0; i < 1000; i++) {
+    const insertResult = await collection.insertOne({
+        "name":"Tie Fighter - "+i.toString(),
+        "type":"Tie Fighter",
+        "side":"empire",
+        "power":Math.floor(Math.random() * (500 + 1))
+    });
+    //console.log('Inserted documents =>', insertResult);    
+  }
 }
 
 async function createStormTroopers(dbConnection){
