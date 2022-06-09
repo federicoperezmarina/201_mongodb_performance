@@ -16,15 +16,17 @@ async function main() {
   const dbConnection = client.db(dbName);
 
   //troops
+  console.log('Creating troops');
   await createStormTroopers(dbConnection);
   await createClones(dbConnection);
   await createBattleDroid(dbConnection);
 
   //starships
+  console.log('Creating starships');
   await createTieFigthers(dbConnection);
   await createXWings(dbConnection);
 
-  return 'main done';
+  return 'Creation finished';
 }
 
 async function createXWings(dbConnection){
