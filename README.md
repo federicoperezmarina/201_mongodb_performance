@@ -51,6 +51,51 @@ Creation finished
 * [Optimizing collections scans](#optimizing-collections-scans)
 
 ### Explain command
+The explain command get the information about how is executed a query.
+
+How to use the command explain():
+```sh
+use starwars;
+db.characters.explain().find();
+
+#output
+{ explainVersion: '1',
+  queryPlanner: 
+   { namespace: 'starwars.characters',
+     indexFilterSet: false,
+     parsedQuery: {},
+     queryHash: '8B3D4AB8',
+     planCacheKey: 'D542626C',
+     maxIndexedOrSolutionsReached: false,
+     maxIndexedAndSolutionsReached: false,
+     maxScansToExplodeReached: false,
+     winningPlan: { stage: 'COLLSCAN', direction: 'forward' },
+     rejectedPlans: [] },
+  command: { find: 'characters', filter: {}, '$db': 'starwars' },
+  serverInfo: 
+   { host: '24060c02ba73',
+     port: 27017,
+     version: '5.0.6',
+     gitVersion: '212a8dbb47f07427dae194a9c75baec1d81d9259' },
+  serverParameters: 
+   { internalQueryFacetBufferSizeBytes: 104857600,
+     internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+     internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+     internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+     internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+     internalQueryProhibitBlockingMergeOnMongoS: 0,
+     internalQueryMaxAddToSetBytes: 104857600,
+     internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600 },
+  ok: 1 }
+```
+
+Here we can see the information given by the command explain()
+- explainVersion, the output format version (for example, "1");
+- command, which details the command being explained;
+- queryPlanner, which details the plan selected by the query optimizer and lists the rejected plans;
+- executionStats, which details the execution of the winning plan and the rejected plans;
+- serverInfo, which provides information on the MongoDB instance; and
+- serverParameters, which details internal parameters.
 
 ### Adding indexes / Covered Query
 ### Projections and Limit
