@@ -99,39 +99,46 @@ Here we can see the information given by the command explain()
 
 We can add verbosity mode to the explain command with this three options: queryPlanner, executionStats and allPlansExecution.
 ```sh
-db.characters.explain('executionStats').find();
+db.characters.explain('executionStats').find({strength:24});
 
 #output
 { explainVersion: '1',
   queryPlanner: 
    { namespace: 'starwars.characters',
      indexFilterSet: false,
-     parsedQuery: {},
+     parsedQuery: { strength: { '$eq': 24 } },
      maxIndexedOrSolutionsReached: false,
      maxIndexedAndSolutionsReached: false,
      maxScansToExplodeReached: false,
-     winningPlan: { stage: 'COLLSCAN', direction: 'forward' },
+     winningPlan: 
+      { stage: 'COLLSCAN',
+        filter: { strength: { '$eq': 24 } },
+        direction: 'forward' },
      rejectedPlans: [] },
   executionStats: 
    { executionSuccess: true,
-     nReturned: 4000000,
-     executionTimeMillis: 1128,
+     nReturned: 79068,
+     executionTimeMillis: 1832,
      totalKeysExamined: 0,
      totalDocsExamined: 4000000,
      executionStages: 
       { stage: 'COLLSCAN',
-        nReturned: 4000000,
-        executionTimeMillisEstimate: 15,
+        filter: { strength: { '$eq': 24 } },
+        nReturned: 79068,
+        executionTimeMillisEstimate: 136,
         works: 4000002,
-        advanced: 4000000,
-        needTime: 1,
+        advanced: 79068,
+        needTime: 3920933,
         needYield: 0,
-        saveState: 4000,
-        restoreState: 4000,
+        saveState: 4002,
+        restoreState: 4002,
         isEOF: 1,
         direction: 'forward',
         docsExamined: 4000000 } },
-  command: { find: 'characters', filter: {}, '$db': 'starwars' },
+  command: 
+   { find: 'characters',
+     filter: { strength: 24 },
+     '$db': 'starwars' },
   serverInfo: 
    { host: '24060c02ba73',
      port: 27017,
@@ -149,7 +156,112 @@ db.characters.explain('executionStats').find();
   ok: 1 }
 ```
 
+Now we are able to take one step and start introducing optimizations in our querys using the explain command
+
 ### Adding indexes / Covered Query
+To create indexes we can use this command
+
+```sh
+# create single index
+db.characters.createIndex({"strength":1});
+
+# output
+'strength_1'
+
+# now we are going to see the explain of a find
+db.characters.explain('executionStats').find({strength:24});
+
+# output 
+{ explainVersion: '1',
+  queryPlanner: 
+   { namespace: 'starwars.characters',
+     indexFilterSet: false,
+     parsedQuery: { strength: { '$eq': 24 } },
+     maxIndexedOrSolutionsReached: false,
+     maxIndexedAndSolutionsReached: false,
+     maxScansToExplodeReached: false,
+     winningPlan: 
+      { stage: 'FETCH',
+        inputStage: 
+         { stage: 'IXSCAN',
+           keyPattern: { strength: 1 },
+           indexName: 'strength_1',
+           isMultiKey: false,
+           multiKeyPaths: { strength: [] },
+           isUnique: false,
+           isSparse: false,
+           isPartial: false,
+           indexVersion: 2,
+           direction: 'forward',
+           indexBounds: { strength: [ '[24, 24]' ] } } },
+     rejectedPlans: [] },
+  executionStats: 
+   { executionSuccess: true,
+     nReturned: 79068,
+     executionTimeMillis: 312,
+     totalKeysExamined: 79068,
+     totalDocsExamined: 79068,
+     executionStages: 
+      { stage: 'FETCH',
+        nReturned: 79068,
+        executionTimeMillisEstimate: 84,
+        works: 79069,
+        advanced: 79068,
+        needTime: 0,
+        needYield: 0,
+        saveState: 79,
+        restoreState: 79,
+        isEOF: 1,
+        docsExamined: 79068,
+        alreadyHasObj: 0,
+        inputStage: 
+         { stage: 'IXSCAN',
+           nReturned: 79068,
+           executionTimeMillisEstimate: 16,
+           works: 79069,
+           advanced: 79068,
+           needTime: 0,
+           needYield: 0,
+           saveState: 79,
+           restoreState: 79,
+           isEOF: 1,
+           keyPattern: { strength: 1 },
+           indexName: 'strength_1',
+           isMultiKey: false,
+           multiKeyPaths: { strength: [] },
+           isUnique: false,
+           isSparse: false,
+           isPartial: false,
+           indexVersion: 2,
+           direction: 'forward',
+           indexBounds: { strength: [ '[24, 24]' ] },
+           keysExamined: 79068,
+           seeks: 1,
+           dupsTested: 0,
+           dupsDropped: 0 } } },
+  command: 
+   { find: 'characters',
+     filter: { strength: 24 },
+     '$db': 'starwars' },
+  serverInfo: 
+   { host: '24060c02ba73',
+     port: 27017,
+     version: '5.0.6',
+     gitVersion: '212a8dbb47f07427dae194a9c75baec1d81d9259' },
+  serverParameters: 
+   { internalQueryFacetBufferSizeBytes: 104857600,
+     internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+     internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+     internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+     internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+     internalQueryProhibitBlockingMergeOnMongoS: 0,
+     internalQueryMaxAddToSetBytes: 104857600,
+     internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600 },
+  ok: 1 }
+```
+
+We can see the difference between launching the query without the index and with it. The executionTimeMillis without index is 1832 and 312 with the index. So we can see the difference between using the index or not.
+
 ### Projections and Limit
 ### Batch processing
 ### Bulk insert
