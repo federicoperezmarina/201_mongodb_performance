@@ -358,6 +358,8 @@ db.characters.explain('executionStats').find({strength:24},{strength:1,_id:0});
   ok: 1 }
 ```
 
+Now we can see that using a covered query perform better with the index created. The performance increase goes from 312ms to 46ms.
+
 ### Projections and Limit
 ### Batch processing
 ### Bulk insert
