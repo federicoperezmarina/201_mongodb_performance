@@ -262,6 +262,102 @@ db.characters.explain('executionStats').find({strength:24});
 
 We can see the difference between launching the query without the index and with it. The executionTimeMillis without index is 1832 and 312 with the index. So we can see the difference between using the index or not.
 
+A covered query is a query that can be satisfied entirely using an index and does not have to examine any documents.
+
+```sh
+# this will be a covered query with the index
+db.characters.explain('executionStats').find({strength:24},{strength:1,_id:0});
+
+# output
+{ explainVersion: '1',
+  queryPlanner: 
+   { namespace: 'starwars.characters',
+     indexFilterSet: false,
+     parsedQuery: { strength: { '$eq': 24 } },
+     maxIndexedOrSolutionsReached: false,
+     maxIndexedAndSolutionsReached: false,
+     maxScansToExplodeReached: false,
+     winningPlan: 
+      { stage: 'PROJECTION_COVERED',
+        transformBy: { strength: 1, _id: 0 },
+        inputStage: 
+         { stage: 'IXSCAN',
+           keyPattern: { strength: 1 },
+           indexName: 'strength_1',
+           isMultiKey: false,
+           multiKeyPaths: { strength: [] },
+           isUnique: false,
+           isSparse: false,
+           isPartial: false,
+           indexVersion: 2,
+           direction: 'forward',
+           indexBounds: { strength: [ '[24, 24]' ] } } },
+     rejectedPlans: [] },
+  executionStats: 
+   { executionSuccess: true,
+     nReturned: 79068,
+     executionTimeMillis: 46,
+     totalKeysExamined: 79068,
+     totalDocsExamined: 0,
+     executionStages: 
+      { stage: 'PROJECTION_COVERED',
+        nReturned: 79068,
+        executionTimeMillisEstimate: 1,
+        works: 79069,
+        advanced: 79068,
+        needTime: 0,
+        needYield: 0,
+        saveState: 79,
+        restoreState: 79,
+        isEOF: 1,
+        transformBy: { strength: 1, _id: 0 },
+        inputStage: 
+         { stage: 'IXSCAN',
+           nReturned: 79068,
+           executionTimeMillisEstimate: 1,
+           works: 79069,
+           advanced: 79068,
+           needTime: 0,
+           needYield: 0,
+           saveState: 79,
+           restoreState: 79,
+           isEOF: 1,
+           keyPattern: { strength: 1 },
+           indexName: 'strength_1',
+           isMultiKey: false,
+           multiKeyPaths: { strength: [] },
+           isUnique: false,
+           isSparse: false,
+           isPartial: false,
+           indexVersion: 2,
+           direction: 'forward',
+           indexBounds: { strength: [ '[24, 24]' ] },
+           keysExamined: 79068,
+           seeks: 1,
+           dupsTested: 0,
+           dupsDropped: 0 } } },
+  command: 
+   { find: 'characters',
+     filter: { strength: 24 },
+     projection: { strength: 1, _id: 0 },
+     '$db': 'starwars' },
+  serverInfo: 
+   { host: '24060c02ba73',
+     port: 27017,
+     version: '5.0.6',
+     gitVersion: '212a8dbb47f07427dae194a9c75baec1d81d9259' },
+  serverParameters: 
+   { internalQueryFacetBufferSizeBytes: 104857600,
+     internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+     internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+     internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+     internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+     internalQueryProhibitBlockingMergeOnMongoS: 0,
+     internalQueryMaxAddToSetBytes: 104857600,
+     internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600 },
+  ok: 1 }
+```
+
 ### Projections and Limit
 ### Batch processing
 ### Bulk insert
