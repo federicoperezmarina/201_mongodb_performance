@@ -361,6 +361,228 @@ db.characters.explain('executionStats').find({strength:24},{strength:1,_id:0});
 Now we can see that using a covered query perform better with the index created. The performance increase goes from 312ms to 46ms.
 
 ### Projections and Limit
+With the projections and limit we want to reduce the subset of data of the document and limiting all the documents that we want to recieve. So that improves the performance.
+
+```sh
+# initial query
+db.starships.explain('executionStats').find({power:25});
+
+# output
+{ explainVersion: '1',
+  queryPlanner: 
+   { namespace: 'starwars.starships',
+     indexFilterSet: false,
+     parsedQuery: { power: { '$eq': 25 } },
+     maxIndexedOrSolutionsReached: false,
+     maxIndexedAndSolutionsReached: false,
+     maxScansToExplodeReached: false,
+     winningPlan: 
+      { stage: 'COLLSCAN',
+        filter: { power: { '$eq': 25 } },
+        direction: 'forward' },
+     rejectedPlans: [] },
+  executionStats: 
+   { executionSuccess: true,
+     nReturned: 4030,
+     executionTimeMillis: 936,
+     totalKeysExamined: 0,
+     totalDocsExamined: 2000000,
+     executionStages: 
+      { stage: 'COLLSCAN',
+        filter: { power: { '$eq': 25 } },
+        nReturned: 4030,
+        executionTimeMillisEstimate: 47,
+        works: 2000002,
+        advanced: 4030,
+        needTime: 1995971,
+        needYield: 0,
+        saveState: 2000,
+        restoreState: 2000,
+        isEOF: 1,
+        direction: 'forward',
+        docsExamined: 2000000 } },
+  command: { find: 'starships', filter: { power: 25 }, '$db': 'starwars' },
+  serverInfo: 
+   { host: '24060c02ba73',
+     port: 27017,
+     version: '5.0.6',
+     gitVersion: '212a8dbb47f07427dae194a9c75baec1d81d9259' },
+  serverParameters: 
+   { internalQueryFacetBufferSizeBytes: 104857600,
+     internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+     internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+     internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+     internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+     internalQueryProhibitBlockingMergeOnMongoS: 0,
+     internalQueryMaxAddToSetBytes: 104857600,
+     internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600 },
+  ok: 1 }
+
+#query with a projection  
+db.starships.explain('executionStats').find({power:25},{power:1,_id:0});
+
+#output
+{ explainVersion: '1',
+  queryPlanner: 
+   { namespace: 'starwars.starships',
+     indexFilterSet: false,
+     parsedQuery: { power: { '$eq': 25 } },
+     maxIndexedOrSolutionsReached: false,
+     maxIndexedAndSolutionsReached: false,
+     maxScansToExplodeReached: false,
+     winningPlan: 
+      { stage: 'PROJECTION_SIMPLE',
+        transformBy: { power: 1, _id: 0 },
+        inputStage: 
+         { stage: 'COLLSCAN',
+           filter: { power: { '$eq': 25 } },
+           direction: 'forward' } },
+     rejectedPlans: [] },
+  executionStats: 
+   { executionSuccess: true,
+     nReturned: 4030,
+     executionTimeMillis: 836,
+     totalKeysExamined: 0,
+     totalDocsExamined: 2000000,
+     executionStages: 
+      { stage: 'PROJECTION_SIMPLE',
+        nReturned: 4030,
+        executionTimeMillisEstimate: 26,
+        works: 2000002,
+        advanced: 4030,
+        needTime: 1995971,
+        needYield: 0,
+        saveState: 2000,
+        restoreState: 2000,
+        isEOF: 1,
+        transformBy: { power: 1, _id: 0 },
+        inputStage: 
+         { stage: 'COLLSCAN',
+           filter: { power: { '$eq': 25 } },
+           nReturned: 4030,
+           executionTimeMillisEstimate: 26,
+           works: 2000002,
+           advanced: 4030,
+           needTime: 1995971,
+           needYield: 0,
+           saveState: 2000,
+           restoreState: 2000,
+           isEOF: 1,
+           direction: 'forward',
+           docsExamined: 2000000 } } },
+  command: 
+   { find: 'starships',
+     filter: { power: 25 },
+     projection: { power: 1, _id: 0 },
+     '$db': 'starwars' },
+  serverInfo: 
+   { host: '24060c02ba73',
+     port: 27017,
+     version: '5.0.6',
+     gitVersion: '212a8dbb47f07427dae194a9c75baec1d81d9259' },
+  serverParameters: 
+   { internalQueryFacetBufferSizeBytes: 104857600,
+     internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+     internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+     internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+     internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+     internalQueryProhibitBlockingMergeOnMongoS: 0,
+     internalQueryMaxAddToSetBytes: 104857600,
+     internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600 },
+  ok: 1 }
+
+# query with the projection and limit
+db.starships.explain('executionStats').find({power:25},{power:1,_id:0}).limit(10);
+
+# output
+{ explainVersion: '1',
+  queryPlanner: 
+   { namespace: 'starwars.starships',
+     indexFilterSet: false,
+     parsedQuery: { power: { '$eq': 25 } },
+     maxIndexedOrSolutionsReached: false,
+     maxIndexedAndSolutionsReached: false,
+     maxScansToExplodeReached: false,
+     winningPlan: 
+      { stage: 'LIMIT',
+        limitAmount: 10,
+        inputStage: 
+         { stage: 'PROJECTION_SIMPLE',
+           transformBy: { power: 1, _id: 0 },
+           inputStage: 
+            { stage: 'COLLSCAN',
+              filter: { power: { '$eq': 25 } },
+              direction: 'forward' } } },
+     rejectedPlans: [] },
+  executionStats: 
+   { executionSuccess: true,
+     nReturned: 10,
+     executionTimeMillis: 3,
+     totalKeysExamined: 0,
+     totalDocsExamined: 6133,
+     executionStages: 
+      { stage: 'LIMIT',
+        nReturned: 10,
+        executionTimeMillisEstimate: 0,
+        works: 6135,
+        advanced: 10,
+        needTime: 6124,
+        needYield: 0,
+        saveState: 6,
+        restoreState: 6,
+        isEOF: 1,
+        limitAmount: 10,
+        inputStage: 
+         { stage: 'PROJECTION_SIMPLE',
+           nReturned: 10,
+           executionTimeMillisEstimate: 0,
+           works: 6134,
+           advanced: 10,
+           needTime: 6124,
+           needYield: 0,
+           saveState: 6,
+           restoreState: 6,
+           isEOF: 0,
+           transformBy: { power: 1, _id: 0 },
+           inputStage: 
+            { stage: 'COLLSCAN',
+              filter: { power: { '$eq': 25 } },
+              nReturned: 10,
+              executionTimeMillisEstimate: 0,
+              works: 6134,
+              advanced: 10,
+              needTime: 6124,
+              needYield: 0,
+              saveState: 6,
+              restoreState: 6,
+              isEOF: 0,
+              direction: 'forward',
+              docsExamined: 6133 } } } },
+  command: 
+   { find: 'starships',
+     filter: { power: 25 },
+     projection: { power: 1, _id: 0 },
+     limit: 10,
+     '$db': 'starwars' },
+  serverInfo: 
+   { host: '24060c02ba73',
+     port: 27017,
+     version: '5.0.6',
+     gitVersion: '212a8dbb47f07427dae194a9c75baec1d81d9259' },
+  serverParameters: 
+   { internalQueryFacetBufferSizeBytes: 104857600,
+     internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+     internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+     internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+     internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+     internalQueryProhibitBlockingMergeOnMongoS: 0,
+     internalQueryMaxAddToSetBytes: 104857600,
+     internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600 },
+  ok: 1 }
+```
+
+We see that making the query without the projection and limit performs worst. The difference between using or not the projection and limit is from 936ms to 836ms to 3ms.
+
 ### Batch processing
 ### Bulk insert
 ### Optimizing sort operations
