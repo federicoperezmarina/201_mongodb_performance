@@ -583,6 +583,7 @@ db.starships.explain('executionStats').find({power:25},{power:1,_id:0}).limit(10
 
 We see that making the query without the projection and limit performs worst. The difference between using or not the projection and limit is from 936ms to 836ms to 3ms.
 
+
 ### Batch processing
 ### Bulk insert
 ### Optimizing sort operations
