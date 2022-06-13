@@ -31,7 +31,7 @@ After the creation of the database, we need to create collections and documents 
 npm install mongodb
 
 # to execute the creation of collection and documents
-node create_database_collections.js
+node src/create_database_collections.js
 
 #output
 Connected successfully to server

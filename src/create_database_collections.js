@@ -32,7 +32,7 @@ async function main() {
 async function createXWings(dbConnection){
   const collection = dbConnection.collection('starships');
 
-  for (let i = 0; i < 1000000; i++) {
+  for (let i = 0; i < 10000; i++) {
     const insertResult = await collection.insertOne({
         "name":"X-Wing - "+i.toString(),
         "type":"X-Wing",
@@ -46,7 +46,7 @@ async function createXWings(dbConnection){
 async function createTieFigthers(dbConnection){
   const collection = dbConnection.collection('starships');
 
-  for (let i = 0; i < 1000000; i++) {
+  for (let i = 0; i < 10000; i++) {
     const insertResult = await collection.insertOne({
         "name":"Tie Fighter - "+i.toString(),
         "type":"Tie Fighter",
@@ -60,7 +60,7 @@ async function createTieFigthers(dbConnection){
 async function createStormTroopers(dbConnection){
   const collection = dbConnection.collection('characters');
 
-  for (let i = 0; i < 1000000; i++) {
+  for (let i = 0; i < 10000; i++) {
     const insertResult = await collection.insertOne({
         "name":"DAX-"+i.toString(),
         "type":"stormtrooper",
@@ -74,7 +74,7 @@ async function createStormTroopers(dbConnection){
 async function createClones(dbConnection){
   const collection = dbConnection.collection('characters');
 
-  for (let i = 0; i < 1000000; i++) {
+  for (let i = 0; i < 10000; i++) {
     const insertResult = await collection.insertOne({
         "name":"KYT-"+i.toString(),
         "type":"clone",
@@ -88,7 +88,7 @@ async function createClones(dbConnection){
 async function createBattleDroid(dbConnection){
   const collection = dbConnection.collection('characters');
 
-  for (let i = 0; i < 2000000; i++) {
+  for (let i = 0; i < 20000; i++) {
     const insertResult = await collection.insertOne({
         "name":"B"+(Math.floor(Math.random() * (2))+1)+"-"+i.toString(),
         "type":"battle droid",
