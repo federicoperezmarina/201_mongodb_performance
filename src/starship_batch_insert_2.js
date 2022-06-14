@@ -16,16 +16,16 @@ async function main() {
 
   //starships
   console.log('Batch insert many 2');
-  await batchInsertMany(dbConnection);
+  await starshipBatchInsertMany(dbConnection);
 
   return 'Creation finished';
 }
 
-async function batchInsertMany(dbConnection){
+async function starshipBatchInsertMany(dbConnection){
   var startTime = performance.now();
-  await dbConnection.collection('batchInsertMany').insertMany(await dbConnection.collection('batchInsert').find({}).toArray());
+  await dbConnection.collection('starshipBatchInsertMany').insertMany(await dbConnection.collection('starshipBatchInsert').find({}).toArray());
   var endTime = performance.now()
-  console.log(`Call to batchInsertMany took ${endTime - startTime} milliseconds`)
+  console.log(`Call to starshipBatchInsertMany took ${endTime - startTime} milliseconds`)
 }
 
 main()

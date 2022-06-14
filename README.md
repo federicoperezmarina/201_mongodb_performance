@@ -44,8 +44,7 @@ Creation finished
 * [Explain command](#explain-command)
 * [Adding indexes / Covered Query](#adding-indexes--covered-query)
 * [Projections and Limit](#projections-and-limit)
-* [Batch processing](#batch-processing)
-* [Bulk insert](#bulk-insert)
+* [Batch processing / Bulk insert](#batch-processing--bulk-insert)
 * [Optimizing sort operations](#optimizing-sort-operations)
 * [Query selectivity / Filter strategies](#query-selectivity--filter-strategies)
 * [Optimizing collections scans](#optimizing-collections-scans)
@@ -584,8 +583,35 @@ db.starships.explain('executionStats').find({power:25},{power:1,_id:0}).limit(10
 We see that making the query without the projection and limit performs worst. The difference between using or not the projection and limit is from 936ms to 836ms to 3ms.
 
 
-### Batch processing
-### Bulk insert
+### Batch processing / Bulk insert
+In the next part, we want to show how to make an insert with multiple elements in order to improve the performance.
+
+First of all we are going to execute 'starship_batch_insert_1.js'. In this example we are going to insert 10000 documents one by one.
+```sh
+node src/starship_batch_insert_1.js
+
+#output
+Connected successfully to server
+Batch insert 1
+Call to starshipBatchInsert took 18333.24850189686 milliseconds
+Creation finished
+```
+
+We can see that the insertion of all documents takes 18 seconds when we insert them one by one.
+
+Secondly we are going to insert all of them with the command 'insertMany' of mongodb.
+```sh
+node src/starship_batch_insert_2.js
+
+#output
+Connected successfully to server
+Batch insert many 2
+Call to starshipBatchInsertMany took 438.1987429857254 milliseconds
+Creation finished
+```
+
+In this step we can se that the creation takes 0.4 seconds in order to insert all together.
+
 ### Optimizing sort operations
 ### Query selectivity / Filter strategies
 Not equals conditions

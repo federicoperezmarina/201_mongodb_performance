@@ -18,24 +18,26 @@ async function main() {
 
   //starships
   console.log('Batch insert 1');
-  await batchInsert(dbConnection);
+  await starshipBatchInsert(dbConnection);
 
   return 'Creation finished';
 }
 
-async function batchInsert(dbConnection){
+async function starshipBatchInsert(dbConnection){
   var startTime = performance.now()
-  const collection = dbConnection.collection('batchInsert');
+  const collection = dbConnection.collection('starshipBatchInsert');
 
   for (let i = 0; i < 10000; i++) {
     const insertResult = await collection.insertOne({
-        "name":"batchInsert - "+i.toString(),
-        "i":i
+        "name":"X-Wing - "+i.toString(),
+        "type":"X-Wing",
+        "side":"rebel",
+        "power":Math.floor(Math.random() * (500 + 1))
     });
     //console.log('Inserted documents =>', insertResult);    
   }
   var endTime = performance.now()
-  console.log(`Call to batchInsert took ${endTime - startTime} milliseconds`)
+  console.log(`Call to starshipBatchInsert took ${endTime - startTime} milliseconds`)
 }
 
 main()
