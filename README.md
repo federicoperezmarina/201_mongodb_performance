@@ -612,6 +612,18 @@ Creation finished
 
 In this step we can se that the creation takes 0.4 seconds in order to insert all together.
 
+Now we are going to do it in a batch execution in order to perform a little bit better.
+```sh
+node src/starship_batch_insert_3.js 
+
+#output
+Connected successfully to server
+Batch insert block 3
+Call to starshipBatchInsertBlock took 309.9983730316162 milliseconds
+Creation finished
+```
+We can see that executing in batch mode take 0.3s a little bit better than insertMany.
+
 ### Optimizing sort operations
 ### Query selectivity / Filter strategies
 Not equals conditions
