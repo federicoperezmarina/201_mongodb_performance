@@ -624,6 +624,8 @@ Creation finished
 ```
 We can see that executing in batch mode take 0.3s a little bit better than insertMany.
 
+<p><img src="https://github.com/federicoperezmarina/201_mongodb_performance/blob/main/img/insertions.png"/></p>
+
 ### Optimizing sort operations
 ### Query selectivity / Filter strategies
 Not equals conditions
