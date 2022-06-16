@@ -45,6 +45,7 @@ Creation finished
 * [Adding indexes / Covered Query](#adding-indexes--covered-query)
 * [Projections and Limit](#projections-and-limit)
 * [Batch processing / Bulk insert](#batch-processing--bulk-insert)
+* [Cloning data](#cloning-data)
 * [Optimizing sort operations](#optimizing-sort-operations)
 * [Query selectivity / Filter strategies](#query-selectivity--filter-strategies)
 * [Optimizing collections scans](#optimizing-collections-scans)
@@ -626,6 +627,7 @@ We can see that executing in batch mode take 0.3s a little bit better than inser
 
 <p><img src="https://github.com/federicoperezmarina/201_mongodb_performance/blob/main/img/insertions.png"/></p>
 
+### Cloning data
 ### Optimizing sort operations
 ### Query selectivity / Filter strategies
 Not equals conditions
