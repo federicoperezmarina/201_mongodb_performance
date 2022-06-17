@@ -629,6 +629,8 @@ We can see that executing in batch mode take 0.3s a little bit better than inser
 
 ### Cloning data
 ### Optimizing sort operations
+If a query includes a sort directive and there is no index on the sorted attributes, MongoDB must fetch all of the data and then sort the resulting data in memory. So it's important to have indexes when you are sorting.
+
 ### Query selectivity / Filter strategies
 Not equals conditions
 Range queries
