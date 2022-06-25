@@ -628,6 +628,10 @@ We can see that executing in batch mode take 0.3s a little bit better than inser
 <p><img src="https://github.com/federicoperezmarina/201_mongodb_performance/blob/main/img/insertions.png"/></p>
 
 ### Cloning data
+Instead using fetch and insert, there is a better way using aggregate and merge. 
+
+![Cloning data](img/clone_data.png)
+
 ### Optimizing sort operations
 If a query includes a sort directive and there is no index on the sorted attributes, MongoDB must fetch all of the data and then sort the resulting data in memory. So it's important to have indexes when you are sorting.
 
