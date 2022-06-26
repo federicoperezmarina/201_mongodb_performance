@@ -644,6 +644,7 @@ Regular Expressions
 $exists Queries
 ### Optimizing collections scans
 
+
 ## Mongodb Optimizing Aggregation Framework
 ## Mongodb Atlas
 ## Mongodb Logs
