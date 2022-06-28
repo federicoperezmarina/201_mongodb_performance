@@ -46,6 +46,8 @@ Creation finished
 * [Projections and Limit](#projections-and-limit)
 * [Batch processing / Bulk insert](#batch-processing--bulk-insert)
 * [Cloning data](#cloning-data)
+* [Update data](#update-data)
+* [Delete data](#delete-data)
 * [Optimizing sort operations](#optimizing-sort-operations)
 * [Query selectivity / Filter strategies](#query-selectivity--filter-strategies)
 * [Optimizing collections scans](#optimizing-collections-scans)
@@ -628,9 +630,13 @@ We can see that executing in batch mode take 0.3s a little bit better than inser
 <p><img src="https://github.com/federicoperezmarina/201_mongodb_performance/blob/main/img/insertions.png"/></p>
 
 ### Cloning data
-Instead using fetch and insert, there is a better way using aggregate and merge. 
+If we need to clone data we can use insertMany or Merge in order to increase the performance of the writes.
 
-![Cloning data](img/clone_data.png)
+### Update data
+If we need to update data, the best way is to use aggregation, update (update many documents at the same time), use upsert and avoid using loops to update the database.
+
+### Delete data
+If we have to do a massive delete, the best way is to do it as a logical delete (update a delete flag) and after removing the documents with another process.
 
 ### Optimizing sort operations
 If a query includes a sort directive and there is no index on the sorted attributes, MongoDB must fetch all of the data and then sort the resulting data in memory. So it's important to have indexes when you are sorting.

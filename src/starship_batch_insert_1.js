@@ -27,7 +27,7 @@ async function starshipBatchInsert(dbConnection){
   var startTime = performance.now()
   const collection = dbConnection.collection('starshipBatchInsert');
 
-  for (let i = 0; i < 10000; i++) {
+  for (let i = 0; i < 100000; i++) {
     const insertResult = await collection.insertOne({
         "name":"X-Wing - "+i.toString(),
         "type":"X-Wing",
