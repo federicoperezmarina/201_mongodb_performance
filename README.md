@@ -632,6 +632,63 @@ We can see that executing in batch mode take 0.3s a little bit better than inser
 ### Cloning data
 If we need to clone data we can use insertMany or Merge in order to increase the performance of the writes.
 
+Here some examples:
+```sh
+python3 src/starship_multiple_fetch_insert.py
+```
+
+```python
+import pymongo
+import time
+
+myClient = pymongo.MongoClient("mongodb://localhost:27017/")
+myDb = myClient.starwars
+myInsertCollection = myDb.starshipMultipleFetchInsertMany
+mySelectCollection = myDb.starshipBatchInsert
+
+start_time = time.time()
+items = []
+for item in mySelectCollection.find({}):
+	items.append(item)
+myInsertCollection.insert_many(items)
+print("--- %s seconds ---" % (time.time() - start_time))
+```
+
+```sh
+python3 src/starship_fetch_insert.py
+```
+
+```python
+import pymongo
+import time
+
+myClient = pymongo.MongoClient("mongodb://localhost:27017/")
+myDb = myClient.starwars
+myInsertCollection = myDb.starshipFetchInsertMany
+mySelectCollection = myDb.starshipBatchInsert
+
+start_time = time.time()
+myInsertCollection.insert_many(mySelectCollection.find({}))
+print("--- %s seconds ---" % (time.time() - start_time))
+```
+
+```sh
+python3 src/starship_aggregation_merge.py
+```
+
+```python
+import pymongo
+import time
+
+myClient = pymongo.MongoClient("mongodb://localhost:27017/")
+myDb = myClient.starwars
+mySelectCollection = myDb.starshipBatchInsert
+
+start_time = time.time()
+mySelectCollection.aggregate([{'$merge':{"into":'starshipAggregationMerge'}}])
+print("--- %s seconds ---" % (time.time() - start_time))
+```
+
 ### Update data
 If we need to update data, the best way is to use aggregation, update (update many documents at the same time), use upsert and avoid using loops to update the database.
 

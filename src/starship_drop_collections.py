@@ -1,11 +1,9 @@
-import requests
-import json
 import pymongo
 import time
 
 myClient = pymongo.MongoClient("mongodb://localhost:27017/")
 myDb = myClient.starwars
-myCollections = ["starshipMultipleFetchInsertMany","starshipFetchInsertMany"]
+myCollections = ["starshipMultipleFetchInsertMany","starshipFetchInsertMany","starshipAggregationMerge"]
 
 start_time = time.time()
 for collection in myCollections:
