@@ -50,7 +50,6 @@ Creation finished
 * [Delete data](#delete-data)
 * [Optimizing sort operations](#optimizing-sort-operations)
 * [Query selectivity / Filter strategies](#query-selectivity--filter-strategies)
-* [Optimizing collections scans](#optimizing-collections-scans)
 
 ### Explain command
 The explain command get the information about how is executed a query.
@@ -699,13 +698,7 @@ If we have to do a massive delete, the best way is to do it as a logical delete 
 If a query includes a sort directive and there is no index on the sorted attributes, MongoDB must fetch all of the data and then sort the resulting data in memory. So it's important to have indexes when you are sorting.
 
 ### Query selectivity / Filter strategies
-Not equals conditions
-Range queries
-$OR or $IN operations
-Array Queries
-Regular Expressions
-$exists Queries
-### Optimizing collections scans
+We should be careful with some query selectivity operators like, $ne, $exists, $or, $in, Array queries, regular expressions. The reason is simple if the amount of data is high the query will take some time to give the result.
 
 
 ## Mongodb Optimizing Aggregation Framework
