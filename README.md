@@ -5,10 +5,6 @@ This is a repository to learn about mongodb performance
 * [Start Mongodb and data creation](#start-mongodb-and-data-creation)
 * [Mongodb Optimizing Queries](#mongodb-optimizing-queries)
 * [Mongodb Optimizing Aggregation Framework](#mongodb-optimizing-aggregation-framework)
-* [Mongodb Atlas](#mongodb-atlas)
-* [Mongodb Logs](#mongodb-logs)
-* [Mongodb Keyhole](#mongodb-keyhole)
-* [Mongodb Maobi](#mongodb-maobi)
 
 ## Start Mongodb and data creation
 First of all we have to install a mongodb database. We are going to create with docker. With the next command we will create a container with a mongodb database.
