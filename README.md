@@ -697,6 +697,10 @@ If a query includes a sort directive and there is no index on the sorted attribu
 We should be careful with some query selectivity operators like, $ne, $exists, $or, $in, Array queries, regular expressions. The reason is simple if the amount of data is high the query will take some time to give the result.
 
 ## Mongodb Optimizing Aggregation Framework
+
+The easiest way to optimize these pipelines is to reduce the amount of data as early as possible; this will reduce the amount of work done by each successive step. It logically follows that the stages in your aggregation that will perform the most work should operate on as little data as possible, with as much filtering as possible being performed in earlier stages.
+
+### Optimizing Aggregation Framework:
 * [Optimizing Aggregation Ordering](#optimizing-aggregation-ordering)
 * [Automatic Pipeline Optimizations](#automatic-pipeline-optimizations)
 * [Aggregation Joins](#aggregation-joins)
