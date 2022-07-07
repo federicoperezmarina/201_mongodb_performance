@@ -708,7 +708,51 @@ The easiest way to optimize these pipelines is to reduce the amount of data as e
 * [Sorting in Aggregation Pipelines](#sorting-in-aggregation-pipelines)
 
 ### Optimizing Aggregation Ordering
+When we are using the aggregation framework we have to sort and limit the earliest we can. We have to take care to sequence aggregation pipelines to eliminate documents earlier rather than later. The earlier data is eliminated from a pipeline, the less work will be required in later pipelines.
+
 ### Automatic Pipeline Optimizations
+Use correctly the steps in the aggregation pipeline
+```javascript
+var explain = db.listingsAndReviews.explain("executionStats").
+   aggregate([
+    {$match: {"property_type" : "House"}},
+    {$match: {"bedrooms" : 3}},
+    {$limit: 100},
+    {$limit: 5},
+    {$skip: 3},
+    {$skip: 2}
+]);
+```
+In this case we can reduce the steps from 6 to 3
+```javascript
+var explain = db.listingsAndReviews.explain("executionStats").
+   aggregate([
+    {$match: {"property_type" : "House","bedrooms" : 3}},
+    {$limit: 5},
+    {$skip: 5}
+]);
+```
+
+Use the limit when you are sorting
+```javascript
+var explain = db.users.explain("executionStats").
+ aggregate([
+  { $sort: {year: -1}},
+  { $limit: 1}
+ ]);
+ ```
+
+Reduce the information extracted in aggregation (such as $group, $project, $unset, $addFields, or $set)
+```javascript
+var exp = db.customers.
+   explain('executionStats').
+   aggregate([
+     { $project: {Country:1, City:1}}
+     { $match: { Country: 'Japan' } },
+     { $group: { _id: { City: '$City' } } }
+   ]);
+```
+
 ### Aggregation Joins
 ### Aggregation Memory Utilization
 ### Sorting in Aggregation Pipelines
