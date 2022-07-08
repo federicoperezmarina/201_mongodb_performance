@@ -754,5 +754,7 @@ var exp = db.customers.
 ```
 
 ### Aggregation Joins
+We should take care with the order of the joins because depending on it can take more or less time.
+
 ### Aggregation Memory Utilization
 ### Sorting in Aggregation Pipelines
