@@ -756,5 +756,14 @@ var exp = db.customers.
 ### Aggregation Joins
 We should take care with the order of the joins because depending on it can take more or less time.
 
+To decide the join order, we should follow:
+
+1. You should try to reduce the amount of data to be joined as much as possible before the join. So if one of the collections is to be filtered, that collection should come first in the join order.
+
+2. If you only have an index to support one of the two join orders, then you should use the join order that has the supporting index.
+
+3.  If the preceding two criteria are met for both join orders, then you should try to join from the smallest collection to the largest collection.
+
 ### Aggregation Memory Utilization
+
 ### Sorting in Aggregation Pipelines
