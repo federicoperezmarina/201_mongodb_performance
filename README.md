@@ -767,3 +767,4 @@ To decide the join order, we should follow:
 ### Aggregation Memory Utilization
 
 ### Sorting in Aggregation Pipelines
+
