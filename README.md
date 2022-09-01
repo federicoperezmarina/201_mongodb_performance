@@ -765,5 +765,15 @@ To decide the join order, we should follow:
 3.  If the preceding two criteria are met for both join orders, then you should try to join from the smallest collection to the largest collection.
 
 ### Aggregation Memory Utilization
+In MongoDB, the size limit for a single document is 16MB. This is true for aggregations as well. When performing aggregations, if any of the output documents can exceed this limit, then an error will be thrown. This may not be a problem when performing simple aggregations. However, when grouping, manipulating, unwinding, and joining documents across multiple collections, you will have to consider the growing size of the output documents. An important distinction here is that this limit only applies to documents in the result. For example, if a document exceeds this limit during the pipeline, but is reduced below the limit before the end, no error will be thrown. In addition, MongoDB combines some operations internally to avoid the limit. 
+
+The second limit to keep in mind is the memory usage limit. At each stage in the aggregation pipeline, there is a memory limit by default of 100MB. If this limit is exceeded, MongoDB will produce an error.
+
+MongoDB does provide a way for getting around this limit during aggregations. The allowDiskUse option can be used to remove this limit for almost all stages. As you may have guessed, when set to true, this allows MongoDB to create a temporary file on disk to hold some data while aggregating, bypassing the memory limit.
 
 ### Sorting in Aggregation Pipelines
+Sorts in aggregation pipelines differ from sorts in a couple of significant ways:
+
+1.  An aggregation can exceed the memory limit for a blocking sort by performing a “disk sort.” In a disk sort, excess data is written to and from disk during the sort operation.
+ 
+2.  Aggregations might not be able to take advantage of indexed sorting options unless the sort is very early in the pipeline.
