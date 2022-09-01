@@ -777,3 +777,4 @@ Sorts in aggregation pipelines differ from sorts in a couple of significant ways
 1.  An aggregation can exceed the memory limit for a blocking sort by performing a “disk sort.” In a disk sort, excess data is written to and from disk during the sort operation.
  
 2.  Aggregations might not be able to take advantage of indexed sorting options unless the sort is very early in the pipeline.
+
